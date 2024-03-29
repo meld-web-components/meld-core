@@ -9,7 +9,6 @@ class IncludeHtml extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log('connected callback, src: ', this.getAttribute('src'))
     return this.loadContent(this.getAttribute('src'));
   }
 
@@ -50,20 +49,11 @@ class IncludeHtml extends HTMLElement {
   }
 
   showErrorSlot() {
-    console.log('Looking for error templates...');
-    const templates = this.querySelectorAll('template');
-    console.log('Templates found:', templates.length);
-    templates.forEach((template, index) => {
-      console.log(`Template ${index} slot:`, template.getAttribute('slot'));
-    });
-    console.log(document.body.innerHTML)
     const template = this.querySelector('template[slot="error"]');
     if (template) {
-      console.log('template found!')
       const clone = document.importNode(template.content, true);
       this.appendChild(clone);
     } else {
-      console.warn('template not found!')
     }
   }
 }
