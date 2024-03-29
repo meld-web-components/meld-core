@@ -8,8 +8,8 @@ class IncludeHtml extends HTMLElement {
     this.document = config?.document || document;
   }
 
-  connectedCallback() {
-    return this.loadContent(this.getAttribute('src'));
+  async attributeChangedCallback(name, _oldValue, newValue) {
+    if (name === 'src') { return this.loadContent(newValue) }
   }
 
   async loadContent(url) {
