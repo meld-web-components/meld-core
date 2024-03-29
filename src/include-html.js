@@ -12,10 +12,17 @@ class IncludeHtml extends HTMLElement {
     if (name === 'src') { return this.loadContent(newValue) }
   }
 
+  get src() {
+    return this.getAttribute('src');
+  }
+
+  set src(value) {
+    this.setAttribute('src', value);
+  }
+
   async loadContent(url) {
     if (!url) {
-      console.error('<get-content> requires a "url" attribute.');
-      console.error('here is the source attribuate', this.getAttribute('src'))
+      this.logError('<includeUrl> requires a "url" attribute.');
       return;
     }
 
@@ -25,6 +32,12 @@ class IncludeHtml extends HTMLElement {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const content = await response.text();
+      if (this.src !== url) {
+        this.logError('src has changed from ' + url + ' to '
+          + this.src + ' while request was in flight'
+        )
+        return;
+      }
       this.replaceContent(content);
       return content;
     } catch (error) {
