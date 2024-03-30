@@ -1,9 +1,12 @@
 {
   "devDependencies": {
+    "express": "^4.19.2",
+    "http-server": "^14.1.1",
     "jsdom": "^24.0.0",
     "vitest": "^1.4.0"
   },
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "dev": "node mock-backend.js"
   }
 }

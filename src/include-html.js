@@ -63,10 +63,10 @@ class IncludeHtml extends HTMLElement {
 
   showErrorSlot() {
     const template = this.querySelector('template[slot="error"]');
+    this.innerHTML = '';
     if (template) {
       const clone = document.importNode(template.content, true);
       this.appendChild(clone);
-    } else {
     }
   }
 }

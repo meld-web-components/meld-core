@@ -93,25 +93,23 @@ describe('IncludeHtml component error handling', () => {
     // Set the initial HTML with the <include-html> element and an error template
     document.body.innerHTML = `
       <include-html src="/nonexistent">
+        <p id="loader">Loading ...</p>
         <template slot="error"><p id="error">Failed to load content.</p></template>
       </include-html>
     `;
 
-    console.log('document body: ', document.body.innerHTML);
     const includeHtmlElement = document.body.querySelector('include-html');
 
-    // Manually trigger connectedCallback to start fetching content
-    await includeHtmlElement.connectedCallback();
-    console.log('document body: ', document.body.innerHTML);
-
     // Wait for asynchronous operations to complete
-    await new Promise(resolve => setTimeout(resolve, 100)); // Adjust as necessary
+    await new Promise(resolve => setTimeout(resolve, 0)); // Adjust as necessary
 
     // Assertions
     expect(global.fetch).toHaveBeenCalledWith('/nonexistent'); // Verify fetch was called with the incorrect URL
     // Check for the presence of the error template content within <include-html>
     const errorElement = includeHtmlElement.querySelector('#error');
+    const loadingElement = includeHtmlElement.querySelector('#loader');
     expect(errorElement).not.toBeNull();
     expect(errorElement.textContent).toBe('Failed to load content.');
+    expect(document.body.contains(loadingElement)).toBe(false);
   });
 });
