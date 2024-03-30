@@ -8,11 +8,13 @@ What if the browser had built in tags with the kind of dynamic behavior you expe
 
 MeldJS aims to fill this space, offering:
 
-- 🚀 Enhanced User Interaction: Dynamic content updates without full page refreshes for seamless user experiences.
-- 🔌 Easy Integration: Works alongside your existing HTML, CSS, and JavaScript, making it perfect for enhancing existing sites or new projects.
-- 🌍 Hypermedia Support: Built with RESTful principles in mind, supporting adaptive and scalable web architectures.
--🛠 Flexibility & Modularity: Use what you need. Each component is standalone, designed to play well with others or shine on its own.
-- 🎨 HTML-Centric server communication: Leverages the power of standard web technologies, emphasizing ease of use and development efficiency.
+🚀 Enhanced User Interaction: Dynamic content updates without full page refreshes for seamless user experiences.
+
+🔌 Easy Integration: Works alongside your existing HTML, CSS, and JavaScript, making it perfect for enhancing existing sites or new projects.
+
+🌍 Hypermedia Support: Built with RESTful principles in mind, supporting adaptive and scalable web architectures.
+🛠  Flexibility & Modularity: Use what you need. Each component is standalone, designed to play well with others or shine on its own.
+🎨 HTML-Centric server communication: Leverages the power of standard web technologies, emphasizing ease of use and development efficiency.
 
 Vs Other Options ✅
 
