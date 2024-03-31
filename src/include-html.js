@@ -35,6 +35,7 @@ class IncludeHtml extends HTMLElement {
     }
 
     try {
+      this.dispatchEvent(new CustomEvent('request-started', { bubbles: true, composed: true }));
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -47,9 +48,11 @@ class IncludeHtml extends HTMLElement {
         return;
       }
       this.replaceContent(content);
+      this.dispatchEvent(new CustomEvent('content-loaded', { bubbles: true, composed: true }))
       return content;
     } catch (error) {
       console.error('Failed to fetch content:', error);
+      this.dispatchEvent(new CustomEvent('request-failed', { bubbles: true, composed: true }));
       this.showErrorSlot();
     }
   }
