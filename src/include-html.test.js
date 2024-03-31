@@ -17,7 +17,7 @@ describe('Whether we are connecting to the DOM correctly', () => {
 
   it('replaces <include-html> with fetched content and checks for spinner', async () => {
     // Start with the HTML string
-    document.body.innerHTML = '<include-html src="/abc"><spinner></spinner></include-html>';
+    document.body.innerHTML = '<include-html src="/abc" shadow-mode="none"><spinner></spinner></include-html>';
 
     // Check if the spinner is present before the fetch call completes
     const spinnerBeforeFetch = document.querySelector('spinner');
@@ -44,6 +44,37 @@ describe('Whether we are connecting to the DOM correctly', () => {
   });
 });
 
+describe('IncludeHtml with open shadow DOM', () => {
+  it('loads and sets content in shadow DOM on successful response', async () => {
+    // Mock global.fetch to simulate fetching content
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        text: () => Promise.resolve('<p>Loaded content</p>'),
+      })
+    );
+
+    // Set up our document body
+    document.body.innerHTML = `
+      <include-html src="mock-url" shadow-mode="open"></include-html>
+    `;
+
+    const includeHtmlComponent = document.querySelector('include-html');
+
+    await new Promise(resolve => setTimeout(resolve, 0)); // Adjust as necessary
+    // Access the shadow DOM and query for content
+    const shadowRoot = includeHtmlComponent.shadowRoot;
+    const loadedContent = shadowRoot.querySelector('p');
+
+    console.log('shadow-root: ', shadowRoot.innerHTML)
+    console.log('loadedContent', loadedContent)
+
+    // Assertions
+    expect(loadedContent.textContent).toBe('Loaded content');
+    expect(fetch).toHaveBeenCalledWith('mock-url');
+  });
+});
+
 describe('includehtml component replacement', () => {
   const successEl = '<p id="success">hi</p>'
   beforeEach(() => {
@@ -63,6 +94,7 @@ describe('includehtml component replacement', () => {
     // Create an instance of the IncludeHtml element
     const includeHtmlElement = new IncludeHtml();
     includeHtmlElement.setAttribute('src', '/abc');
+    includeHtmlElement.setAttribute('shadow-mode', 'none');
 
     // Append to the body to trigger connectedCallback automatically
     document.body.appendChild(includeHtmlElement);
@@ -92,7 +124,7 @@ describe('IncludeHtml component error handling', () => {
   it('shows error slot content on fetch failure', async () => {
     // Set the initial HTML with the <include-html> element and an error template
     document.body.innerHTML = `
-      <include-html src="/nonexistent">
+      <include-html src="/nonexistent" shadow-mode="none">
         <p id="loader">Loading ...</p>
         <template slot="error"><p id="error">Failed to load content.</p></template>
       </include-html>

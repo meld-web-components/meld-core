@@ -1,11 +1,19 @@
 class IncludeHtml extends HTMLElement {
-  static observedAttributes = ["src"];
+  static observedAttributes = ["src", "shadow-mode"];
 
   constructor(config) {
     super();
     this.logInfo = config?.logInfo || console.log;
     this.logError = config?.logError || console.error;
     this.document = config?.document || document;
+  }
+
+  connectedCallback() {
+    // Now it's safe to access attributes
+    const shadowMode = this.getAttribute('shadow-mode');
+    if (shadowMode === 'open' || shadowMode === 'closed') {
+      this.attachShadow({ mode: shadowMode });
+    }
   }
 
   async attributeChangedCallback(name, _oldValue, newValue) {
@@ -46,27 +54,22 @@ class IncludeHtml extends HTMLElement {
     }
   }
 
-  replaceContent(content, swap = 'innerHTML') {
-    if (swap === 'outerHTML') {
-      // Replace the entire element with the new content
-      const range = document.createRange();
-      range.selectNode(this);
-      const fragment = range.createContextualFragment(content);
-      this.replaceWith(fragment);
-    } else if (swap === 'innerHTML') {
-      this.innerHTML = content;
+  replaceContent(content) {
+    // Check if Shadow DOM is used
+    if (this.shadowRoot) {
+      this.shadowRoot.innerHTML = content;
     } else {
-      // Log an error or handle the case where 'swap' is neither 'outerHTML' nor 'innerHTML'
-      console.error(`Invalid swap value: ${swap}. Expected 'outerHTML' or 'innerHTML'.`);
+      this.innerHTML = content;
     }
   }
 
   showErrorSlot() {
+    const contentContainer = this.shadowRoot || this;
     const template = this.querySelector('template[slot="error"]');
-    this.innerHTML = '';
+    contentContainer.innerHTML = ''; // Clear current content
     if (template) {
       const clone = document.importNode(template.content, true);
-      this.appendChild(clone);
+      contentContainer.appendChild(clone);
     }
   }
 }
