@@ -10,7 +10,7 @@ class IncludeHtml extends HTMLElement {
 
   connectedCallback() {
     // Now it's safe to access attributes
-    const shadowMode = this.getAttribute('shadow-mode');
+    const shadowMode = this.getAttribute('shadow-mode') || 'open';
     if (shadowMode === 'open' || shadowMode === 'closed') {
       this.attachShadow({ mode: shadowMode });
     }
