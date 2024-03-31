@@ -28,6 +28,13 @@ class IncludeHtml extends HTMLElement {
     this.setAttribute('src', value);
   }
 
+  getFetchOptions() {
+    const cors = this.getAttribute('cors') || 'cors';
+    const credentials = this.getAttribute('credentials') || 'same-origin';
+    const redirect = this.getAttribute('redirect') || 'follow';
+    const referrerPolicy = this.getAttribute('referrer-policy') || 'no-referrer';
+    return { cors, credentials, redirect, referrerPolicy };
+  }
   async loadContent(url) {
     if (!url) {
       this.logError('<includeUrl> requires a "url" attribute.');
@@ -35,8 +42,9 @@ class IncludeHtml extends HTMLElement {
     }
 
     try {
+      const fetchOptions = this.getFetchOptions()
       this.dispatchEvent(new CustomEvent('request-started', { bubbles: true, composed: true }));
-      const response = await fetch(url);
+      const response = await fetch(url, fetchOptions);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

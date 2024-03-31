@@ -1,6 +1,13 @@
 import IncludeHtml from '../src/include-html.js';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
+const defaultFetchOptions = {
+  cors: 'cors',
+  credentials: 'same-origin',
+  redirect: 'follow',
+  referrerPolicy: 'no-referrer'
+};
+
 describe('Whether we are connecting to the DOM correctly', () => {
   beforeEach(() => {
     // Mock global.fetch with vitest
@@ -71,7 +78,7 @@ describe('IncludeHtml with open shadow DOM', () => {
 
     // Assertions
     expect(loadedContent.textContent).toBe('Loaded content');
-    expect(fetch).toHaveBeenCalledWith('mock-url');
+    expect(fetch).toHaveBeenCalledWith('mock-url', defaultFetchOptions);
   });
 });
 
@@ -103,7 +110,7 @@ describe('includehtml component replacement', () => {
     await new Promise(resolve => setTimeout(resolve, 0)); // Adjust as necessary
 
     // Assertions
-    expect(global.fetch).toHaveBeenCalledWith('/abc');
+    expect(global.fetch).toHaveBeenCalledWith('/abc', defaultFetchOptions);
     expect(document.body.innerHTML).toContain(successEl);
     expect(document.body.contains(includeHtmlElement)).toBe(true);
   });
@@ -136,7 +143,7 @@ describe('IncludeHtml component error handling', () => {
     await new Promise(resolve => setTimeout(resolve, 0)); // Adjust as necessary
 
     // Assertions
-    expect(global.fetch).toHaveBeenCalledWith('/nonexistent'); // Verify fetch was called with the incorrect URL
+    expect(global.fetch).toHaveBeenCalledWith('/nonexistent', defaultFetchOptions); // Verify fetch was called with the incorrect URL
     // Check for the presence of the error template content within <include-html>
     const errorElement = includeHtmlElement.querySelector('#error');
     const loadingElement = includeHtmlElement.querySelector('#loader');
