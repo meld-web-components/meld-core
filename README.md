@@ -88,8 +88,6 @@ Include-html
 
 ## dynamic-form
 
-**Should I call this form-container, and have the form IN the container?**
-
 The `dynamic-form` element is identical the `form` element except that:
 
 1. It emits events for when a form submission is in flight, when the server accepts the submission, and when the server rejects it
@@ -100,7 +98,7 @@ The `dynamic-form` element is identical the `form` element except that:
 Let's look at an example:
 
 ```html
-<dynamic-form 
+<form is="dynamic-form"
   method="DELETE" <!-- or POST, PUT, DELETE, PATCH -->
   add-class-in-flight="in-flight"
   add-class-error="server-error"
@@ -111,5 +109,5 @@ Let's look at an example:
   <div class="row">
     <button type="submit">Submit</button>
   </div>
-</dynamic-form>
+</form>
 ```
