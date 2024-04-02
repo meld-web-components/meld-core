@@ -1,8 +1,20 @@
 # Meld: Hypermedia Web Components.🌐✨
 
-MeldJS is a lightweight library for enhancing your web applications with dynamic, integrated forms and components. Designed for developers who crave the simplicity of HTML and the dynamism of single-page applications (SPAs) without the overhead.
+Meld is a lightweight library for enhancing your web applications with dynamic, integrated forms and components. Designed for developers who crave the simplicity of HTML and the dynamism of single-page applications (SPAs) without the overhead.
 
-## Why MeldJS? 🤔
+Meld core augments core browser capabilities. Its aim is to help you do things like:
+
+- Avoid full page refreshes for forms
+- Dynamically require HTML
+- Turbo-links like link boosting
+
+Meld may also add repositories for other use cases, including:
+
+- Complex forms
+- Live updates over websockets
+- Design systems
+
+## Why Meld? 🤔
 
 What if the browser had built in tags with the kind of dynamic behavior you expect from SPAs -- but without the bloat.
 
@@ -25,7 +37,7 @@ Vs Other Options ✅
 - Versatility: Suitable for anything from small enhancements to existing pages to building complex, dynamic interfaces in new projects.
 - Developer Friendly: Embraces web standards, making it intuitive for those familiar with HTML, CSS, and basic JavaScript.
 
-## <include-html>
+## include-html
 
 `include-html` is a custom web component that will request HTML from a server and replace its contents with the result.
 
@@ -57,12 +69,47 @@ And add a template to show an error in case your server is unreachable:
 </include-html>
 ```
 
+By default, the HTML returned by the server is encapsulated in the shadow dom. However, when the `shadow-mode` is set to `none`, no shadow dom will be used.
+
 ### Options
+
+Include-html
 
 ```html
 <include-html
   src="/my/content"
-  swap="outerHTML" <!-- Defaults to innerHTML -->
+  cors="cors"
+  credentials="same-origin"
+  redirect="follow"
+  referrer-policy="no-referrer"
 >
 </include-html>
+```
+
+## dynamic-form
+
+**Should I call this form-container, and have the form IN the container?**
+
+The `dynamic-form` element is identical the `form` element except that:
+
+1. It emits events for when a form submission is in flight, when the server accepts the submission, and when the server rejects it
+2. When a form is submitted, the server's response is swapped in for the form element.
+3. The form can be sent using any HTTP verb.
+4. The form can add classes to signify when a request is in flight, and when the request failed
+
+Let's look at an example:
+
+```html
+<dynamic-form 
+  method="DELETE" <!-- or POST, PUT, DELETE, PATCH -->
+  add-class-in-flight="in-flight"
+  add-class-error="server-error"
+>
+  <label>Type your email to confirm you want to delete your account
+   <input name="email" type="email"/>
+  </label>
+  <div class="row">
+    <button type="submit">Submit</button>
+  </div>
+</dynamic-form>
 ```
