@@ -1,4 +1,4 @@
-class IncludeHtml extends HTMLElement {
+class IncludeHTML extends HTMLElement {
   static observedAttributes = ["src", "shadow-mode"];
 
   constructor(config) {
@@ -33,7 +33,8 @@ class IncludeHtml extends HTMLElement {
     const credentials = this.getAttribute('credentials') || 'same-origin';
     const redirect = this.getAttribute('redirect') || 'follow';
     const referrerPolicy = this.getAttribute('referrer-policy') || 'no-referrer';
-    return { cors, credentials, redirect, referrerPolicy };
+    const headers = { 'Accept': 'text/html' }
+    return { cors, credentials, redirect, referrerPolicy, headers };
   }
   async loadContent(url) {
     if (!url) {
@@ -59,7 +60,7 @@ class IncludeHtml extends HTMLElement {
       this.dispatchEvent(new CustomEvent('content-loaded', { bubbles: true, composed: true }))
       return content;
     } catch (error) {
-      console.error('Failed to fetch content:', error);
+      this.logError('Failed to fetch content:', error);
       this.dispatchEvent(new CustomEvent('request-failed', { bubbles: true, composed: true }));
       this.showErrorSlot();
     }
@@ -85,6 +86,6 @@ class IncludeHtml extends HTMLElement {
   }
 }
 
-export default IncludeHtml;
+export default IncludeHTML;
 
-customElements.define('include-html', IncludeHtml);
+customElements.define('include-html', IncludeHTML);

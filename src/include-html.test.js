@@ -5,7 +5,8 @@ const defaultFetchOptions = {
   cors: 'cors',
   credentials: 'same-origin',
   redirect: 'follow',
-  referrerPolicy: 'no-referrer'
+  referrerPolicy: 'no-referrer',
+  headers: { 'Accept': 'text/html' }
 };
 
 describe('Whether we are connecting to the DOM correctly', () => {
